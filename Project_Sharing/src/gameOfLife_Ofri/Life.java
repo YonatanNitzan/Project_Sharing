@@ -2,14 +2,16 @@ package gameOfLife_Ofri;
 
 public class Life {
 
-	private static String[][] cells = new String[17][17];
+	public static int SIZE = 40;
+	private static String[][] cells = new String[SIZE+2][SIZE+2];
+	private static String[][] previousGen = new String[SIZE+2][SIZE+2];
 	private static int genNum = 1;
 	
 	public static String[][] fill_arr(String [][] arr, String shape)
 	{
-		for(int i=0; i<17; i++)
+		for(int i=0; i<SIZE+2; i++)
 		{
-			for(int k=0; k<17; k++)
+			for(int k=0; k<SIZE+2; k++)
 				arr[i][k] = "0";
 		}
 		
@@ -20,11 +22,11 @@ public class Life {
 	{
 		System.out.println("gen " + gen);
 		
-		for(int i=1; i<16; i++)
+		for(int i=1; i<SIZE+1; i++)
 		{
-			for(int k=1; k<16; k++)
+			for(int k=1; k<SIZE+1; k++)
 			{
-				if(k==15)
+				if(k==SIZE)
 					if(arr[i][k] == "1")
 						System.out.println("* ");
 					else
@@ -35,7 +37,7 @@ public class Life {
 					else
 						System.out.print("- ");
 			}
-			if(i==15)
+			if(i==SIZE)
 				System.out.println(" ");
 		}
 	}
@@ -44,15 +46,20 @@ public class Life {
 	{
 		genNum++;
 		int count = 0;
-		String[][] new_arr = new String[17][17];
+		String[][] new_arr = new String[SIZE+2][SIZE+2];
 		
-		for(int i=0; i<17; i++)
-			for(int k=0; k<17; k++)
-				new_arr[i][k] = old_arr[i][k];
-		
-		for(int i=1; i<16; i++)
+		for(int i=0; i<SIZE+2; i++)
 		{
-			for(int k=1; k<16; k++)
+			for(int k=0; k<SIZE+2; k++)
+			{
+				new_arr[i][k] = old_arr[i][k];
+				previousGen[i][k] = old_arr[i][k];
+			}
+		}
+		
+		for(int i=1; i<SIZE+1; i++)
+		{
+			for(int k=1; k<SIZE+1; k++)
 			{
 				count = 0;
 				if(old_arr[i-1][k-1] == "1")
@@ -87,6 +94,7 @@ public class Life {
 			}
 		}
 		
+		Board.setIsPrevious(false);
 		return new_arr;
 	}
 	
@@ -108,6 +116,11 @@ public class Life {
 	public static void setGenNum(int newGenNum)
 	{
 		genNum = newGenNum;
+	}
+	
+	public static String[][] getPreviousGen()
+	{
+		return previousGen;
 	}
 	
 	public static void main(String[] args) {
