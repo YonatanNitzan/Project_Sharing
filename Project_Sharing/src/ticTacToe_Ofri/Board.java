@@ -89,7 +89,7 @@ public class Board {
 
 		// Test for column win
 		for (int i = 0; i < 3; i++) {
-			test = 0;
+			test = 0; 
 			for (int j = 0; j < 3; j++)
 				test += board[i][j];
 
@@ -107,6 +107,7 @@ public class Board {
 				return true;
 		}
 
+		// Test for diagonal win (left to right)
 		test = 0;
 		for (int i = 0; i < 3; i++)
 			test += board[i][i];
@@ -114,6 +115,7 @@ public class Board {
 		if (test/3 == sign)
 			return true;
 
+		// Test for diagonal win (right to left)
 		test = 0;
 		for (int i = 0; i < 3; i++)
 			test += board[i][2 - i];
@@ -121,6 +123,7 @@ public class Board {
 		if (test/3 == sign)
 			return true;
 
+		// No win situation
 		return false;
 	}
 }
