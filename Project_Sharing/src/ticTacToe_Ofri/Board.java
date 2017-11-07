@@ -1,103 +1,126 @@
 package ticTacToe_Ofri;
+
 import java.util.Scanner;
 
 public class Board {
 
 	private static Scanner in = new Scanner(System.in);
-	
-	public String[][] board = new String[3][3]; 
-	
+
+	public char[][] board = new char[3][3];
+
+	/**
+	 * Constructor creates an empty board.
+	 */
 	public Board() {
-		for(int i=0; i<3; i++)
-		{
-			for(int j=0; j<3; j++)
-				board[i][j] = "-";
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++)
+				board[i][j] = '-';
 		}
 	}
-	
+
 	/**
-	 * Returns false if out of range and true otherwise
+	 * Returns whether the values are in range.
+	 * 
+	 * @param r
+	 *            - Row
+	 * @param c
+	 *            - Column
 	 */
-	private boolean checkRange(int r, int c) {
-		if(r > 2 || r < 0 || c > 2 || c < 0)
-			return false;
-		else
+	private boolean inRange(int r, int c) {
+		if ((r >= 0 && r < 3) && (c >= 0 && c < 3))
 			return true;
+		else
+			return false;
 	}
-	
+
 	/**
-	 * Prints the board
+	 * Prints the board.
 	 */
 	public void printBoard() {
-		for(int i=0; i<3; i++)
-		{
-			for(int j=0; j<3; j++)
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++)
 				System.out.print(board[i][j] + " ");
-			
+
 			System.out.println("");
 		}
 	}
-	
+
 	/**
-	 * Changes a given location in the board to a given String
+	 * Inserts a sign in a given position.
+	 * 
+	 * @param r
+	 *            - Row
+	 * @param c
+	 *            - Column
+	 * @param sign
+	 *            - The sign to be inserted
 	 */
-	public void changeBoard(int r, int c, String sign) {
-		while(!checkRange(r, c) || !board[r][c].equals("-"))
-		{
+	public void putSign(int r, int c, char sign) {
+		// Checks whether position is out of bounds or taken
+		while (!inRange(r, c) || !(board[r][c] == '-')) {
 			System.out.println("Place taken or out of range. Enter a different location");
-			r = in.nextInt()-1;
-			c = in.nextInt()-1;
+			r = in.nextInt() - 1;
+			c = in.nextInt() - 1;
 		}
-		
-		board[r][c] = sign;
-	}
-	
-	public void eraseSign(int r, int c)
-	{
-		board[r][c] = "-";
-	}
-	
-	/**
-	 * Checks if the game has ended
-	 */
-	public boolean checkBoard(String sign) {
-		String str;
-		
-		for(int i=0; i<3; i++)
-		{
-			str = "";
-			for(int j=0; j<3; j++)
-				str += board[i][j];
-			
-			if(str.equals(sign + sign + sign))
-				return true;
-		}
-		
-		for(int i=0; i<3; i++)
-		{
-			str = "";
-			for(int j=0; j<3; j++)
-				str += board[j][i];
-			
-			if(str.equals(sign + sign + sign))
-				return true;
-		}
-		
-		str = "";
-		for(int i=0; i<3; i++)
-			str += board[i][i];
-		
-		if(str.equals(sign + sign + sign))
-			return true;
-		
-		str = "";
-		for(int i=0; i<3; i++)
-			str += board[i][2-i];
-		
-		if(str.equals(sign + sign + sign))
-			return true;
-		
-		return false;
+
+		board[r][c] = sign; // Inserts the sign
 	}
 
+	/**
+	 * Clears a given position.
+	 * 
+	 * @param r
+	 *            - Row
+	 * @param c
+	 *            - Column
+	 */
+	public void eraseSign(int r, int c) {
+		board[r][c] = '-';
+	}
+
+	/**
+	 * Checks if an opponent won.
+	 * 
+	 * @param sign
+	 *            - The sign of the tested opponent
+	 */
+	public boolean checkBoard(char sign) {
+		int test;
+
+		// Test for column win
+		for (int i = 0; i < 3; i++) {
+			test = 0;
+			for (int j = 0; j < 3; j++)
+				test += board[i][j];
+
+			if (test/3 == sign)
+				return true;
+		}
+
+		// Test for row win
+		for (int i = 0; i < 3; i++) {
+			test = 0;
+			for (int j = 0; j < 3; j++)
+				test += board[j][i];
+
+			if (test/3 == sign)
+				return true;
+		}
+
+		test = 0;
+		for (int i = 0; i < 3; i++)
+			test += board[i][i];
+
+		if (test/3 == sign)
+			return true;
+
+		test = 0;
+		for (int i = 0; i < 3; i++)
+			test += board[i][2 - i];
+
+		if (test/3 == sign)
+			return true;
+
+		return false;
+	}
 }
